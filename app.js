@@ -47,11 +47,11 @@ app.post('/generate-payment-link', async (req, res) => {
   res.send(session.url)
 })
 
-app.get('success', (req, res) => {
+app.get('/success', (req, res) => {
   res.send('😀');
 })
 
-app.get('cancel', (req, res) => {
+app.get('/cancel', (req, res) => {
   res.send('😢');
 })
 

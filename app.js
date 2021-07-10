@@ -3,14 +3,17 @@ const app = express();
 require('dotenv').config();
 const stripe = require('stripe')(process.env.STRIPE_SK);
 var bodyParser = require('body-parser');
+var cors = require('cors')
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.json())
 
-// app.get('/', (req, res) => {
-//   // res.send('Hello World!');
-// })
+app.use(cors())
+
+app.get('/donate', (req, res) => {
+  res.render('donate.ejs');
+})
 
 app.post('/bod', (req, res) => {
   console.log(req.body.amount * 100)
@@ -35,13 +38,21 @@ app.post('/generate-payment-link', async (req, res) => {
     ],
     mode: 'payment',
     billing_address_collection: 'required',
-    success_url: `https://scarecrowrow.org/success.html`,
-    cancel_url: `https://scarecrowrow.org/cancel.html`,
+    success_url: `https://api.scarecrowrow.org/success`,
+    cancel_url: `https://api.scarecrowrow.org/cancel`,
   });
 
   console.log(`Generating a payment URL for ${req.body.amount}. Checkout session ID is: ${session.id}`)
 
   res.send(session.url)
+})
+
+app.get('success', (req, res) => {
+  res.send('😀');
+})
+
+app.get('cancel', (req, res) => {
+  res.send('😢');
 })
 
 app.listen(process.env.PORT || 80, () => {

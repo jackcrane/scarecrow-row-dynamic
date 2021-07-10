@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate a donation link</title>
+  <script>
+    function generateLink(el) {
+      if(document.getElementById('amount').value != '' && document.getElementById('amount').value != 0) {
+        el.value = 'Loading...'
+        
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        let raw = JSON.stringify({"amount":document.getElementById('amount').value});
+
+        let requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+
+        fetch("/generate-payment-link", requestOptions)
+          .then(response => response.text())
+          .then(result => document.location.href = (result))
+          .catch(error => console.log('error', error));
+      } else {
+        alert('Please set an amount more than $0')
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Select how much you want to donate:</h1>
+  <input type="text" id="amount" placeholder="How much?">
+  <input type="submit" onclick="generateLink(this)">
+</body>
+</html>

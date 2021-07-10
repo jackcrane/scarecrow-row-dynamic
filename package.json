@@ -1,0 +1,22 @@
+{
+  "name": "scarecrow-row-dynamic",
+  "version": "0.0.1",
+  "description": "Dynamic backend APIs for the Scarecrow Row websites",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "scarecrow-row-dynamic"
+  },
+  "author": "Jack Crane",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "stripe": "^8.160.0"
+  }
+}

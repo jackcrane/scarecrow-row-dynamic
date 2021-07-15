@@ -23,6 +23,7 @@ app.post('/bod', (req, res) => {
 app.post('/generate-payment-link', async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
+    submit_type: 'donate',
     line_items: [
       {
         price_data: {
@@ -38,6 +39,12 @@ app.post('/generate-payment-link', async (req, res) => {
     ],
     mode: 'payment',
     billing_address_collection: 'required',
+    metadata: {
+      'name':req.body.name,
+      'phonenum':req.body.phonenum,
+      'teamname':req.body.teamname,
+      'dono_with_team':req.body.dono_with_team
+    },
     success_url: `https://api.scarecrowrow.org/success`,
     cancel_url: `https://api.scarecrowrow.org/cancel`,
   });

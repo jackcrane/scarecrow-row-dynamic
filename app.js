@@ -123,7 +123,7 @@ app.post('/webhook', express.json({type: 'application/json'}), async(request, re
 Donation received!!!
 Donor information:\n
 - email:${evt.customer_details.email},\n
-- amount:${evt.amount_subtotal},\n
+- amount:${evt.amount_subtotal / 100},\n
 - stripe cid:${evt.customer}
         `,
         to:5136289360,

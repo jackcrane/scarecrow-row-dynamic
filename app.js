@@ -65,9 +65,10 @@ app.post('/generate-payment-link', async (req, res) => {
     console.log(`Generating a payment URL for ${req.body.amount}. Checkout session ID is: ${session.id}`)
 
     query = `
-    INSERT INTO clients (name, donation_type, phone_number, team_name, donation_amount, stripe_checkout_id) 
+    INSERT INTO clients (name, email, donation_type, phone_number, team_name, donation_amount, stripe_checkout_id) 
       VALUES (
         '${req.body.name}',
+        '${req.body.email}',
         '${req.body.dono_with_team ? 'team' : 'individual'}',
         '${parseInt(req.body.phonenum)}',
         '${req.body.teamname}',

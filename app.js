@@ -62,7 +62,10 @@ app.post('/generate-payment-link', async (req, res) => {
       success_url: `https://scarecrowrow.org/thanks.html`,
       cancel_url: `https://scarecrowrow.org/donate.html`,
     });
+    console.log(`-----------------------------------------------------------------------------------------------`)
     console.log(`Generating a payment URL for ${req.body.amount}. Checkout session ID is: ${session.id}`)
+    console.log(`User information: Name: ${req.body.name}, Email: ${req.body.email}, Dono type: ${req.body.dono_with_team}`)
+    console.log(`Phone number: ${req.body.phonenum}, Teamname: ${req.body.teamname}`)
 
     query = `
     INSERT INTO clients (name, email, donation_type, phone_number, team_name, donation_amount, stripe_checkout_id) 

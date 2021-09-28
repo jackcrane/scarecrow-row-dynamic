@@ -102,7 +102,7 @@ app.post('/generate-payment-link', async (req, res) => {
   }
 })
 
-app.post('/donate-and-vote', async (req, res) => {
+app.post('/donate-and-vote', bodyParser.urlencoded(), async (req, res) => {
   let session;
   let query;
   if(parseInt(req.body.amount) > 0) {
@@ -136,7 +136,7 @@ app.post('/donate-and-vote', async (req, res) => {
     });
     console.log(`-----------------------------------------------------------------------------------------------`)
     console.log(`Generating a  payment URL for ${req.body.amount}. Checkout session ID is: ${session.id}`)
-    console.log(`Vote received for `)
+    console.log(`Vote received for ${req.body.vote}`)
 
     query = `
     INSERT INTO clients (name, email, donation_type, phone_number, team_name, donation_amount, stripe_checkout_id) 
@@ -167,9 +167,9 @@ app.post('/donate-and-vote', async (req, res) => {
   connection.query(query)
 
   if(session) {
-    res.send(session.url)
+    res.redirect(session.url)
   } else {
-    res.send('https://scarecrowrow.org/thanks.html')
+    res.redirect('https://scarecrowrow.org/thanks.html')
   }
 })
 

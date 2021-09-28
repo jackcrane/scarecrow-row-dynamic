@@ -131,7 +131,7 @@ app.post('/donate-and-vote', bodyParser.urlencoded(), async (req, res) => {
           'class':'vote'
         },
       },
-      success_url: `https://scarecrowrow.org/thanks.html`,
+      success_url: `https://scarecrowrow.org/thanks-vote.html`,
       cancel_url: `https://scarecrowrow.org/vote.html`,
     });
     console.log(`-----------------------------------------------------------------------------------------------`)
@@ -155,10 +155,10 @@ app.post('/donate-and-vote', bodyParser.urlencoded(), async (req, res) => {
     query = `
       INSERT INTO clients (name, donation_type, phone_number, team_name, donation_amount) 
         VALUES (
-          '${req.body.name}',
-          '${req.body.dono_with_team ? 'team' : 'individual'}',
-          '${parseInt(req.body.phonenum)}',
-          '${req.body.teamname}',
+          '${'_name'}',
+          '${'vote'}',
+          '${000}',
+          '${req.body.vote}',
           ${0}
           )
     `
@@ -169,7 +169,7 @@ app.post('/donate-and-vote', bodyParser.urlencoded(), async (req, res) => {
   if(session) {
     res.redirect(session.url)
   } else {
-    res.redirect('https://scarecrowrow.org/thanks.html')
+    res.redirect('https://scarecrowrow.org/thanks-vote.html')
   }
 })
 

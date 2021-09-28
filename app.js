@@ -102,6 +102,77 @@ app.post('/generate-payment-link', async (req, res) => {
   }
 })
 
+app.post('/donate-and-vote', async (req, res) => {
+  let session;
+  let query;
+  if(parseInt(req.body.amount) > 0) {
+    session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      submit_type: 'donate',
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'Scarecrow Row + Madi\s House Donation',
+              images: ['https://scarecrowrow.org/assets/images/favicon_clear.png', 'https://madishousecincy.org/wp-content/uploads/2020/02/madishouse_logo.png'],
+            },
+            unit_amount: req.body.amount * 100,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      billing_address_collection: 'required',
+      payment_intent_data: {
+          metadata: {
+          'name':req.body.name,
+          'vote':req.body.vote,
+          'class':'vote'
+        },
+      },
+      success_url: `https://scarecrowrow.org/thanks.html`,
+      cancel_url: `https://scarecrowrow.org/vote.html`,
+    });
+    console.log(`-----------------------------------------------------------------------------------------------`)
+    console.log(`Generating a  payment URL for ${req.body.amount}. Checkout session ID is: ${session.id}`)
+    console.log(`Vote received for `)
+
+    query = `
+    INSERT INTO clients (name, email, donation_type, phone_number, team_name, donation_amount, stripe_checkout_id) 
+      VALUES (
+        '${'_name'}',
+        '${'_email'}',
+        '${'vote'}',
+        '${000}',
+        '${req.body.vote}',
+        ${parseInt(req.body.amount)},
+        '${session.id}'
+      )
+  `
+  } else {
+
+    query = `
+      INSERT INTO clients (name, donation_type, phone_number, team_name, donation_amount) 
+        VALUES (
+          '${req.body.name}',
+          '${req.body.dono_with_team ? 'team' : 'individual'}',
+          '${parseInt(req.body.phonenum)}',
+          '${req.body.teamname}',
+          ${0}
+          )
+    `
+  }
+
+  connection.query(query)
+
+  if(session) {
+    res.send(session.url)
+  } else {
+    res.send('https://scarecrowrow.org/thanks.html')
+  }
+})
+
 app.get('/success', (req, res) => {
   res.send('😀');
 })
